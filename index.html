@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoConsult | Geospatial Consultant · Tamale, Ghana</title>
+  <title>NOVELTY DREAMS INVEST.COM | Geospatial Consultant · Tamale, Ghana</title>
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -57,11 +57,41 @@
 
     /* header / hero */
     .hero {
-      background: linear-gradient(135deg, #0a2f44 0%, #1b4f6e 100%);
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      min-height: clamp(220px, 24vw, 360px);
+      display: grid;
+      place-content: center;
+      width: 100%;
+      background: #0a2f44;
       color: white;
       padding: 2rem 2rem 1.5rem;
       text-align: center;
       border-bottom: 5px solid #f9b234;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-image: linear-gradient(rgba(10, 47, 68, 0.56), rgba(10, 47, 68, 0.72)), var(--hero-image, url("Photos/images1.jpg"));
+      transition: opacity 0.8s ease;
+    }
+
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero::before {
+        transition: none;
+      }
     }
 
     .hero h1 {
@@ -464,7 +494,8 @@
       }
 
       .hero {
-        padding: 1.5rem 1rem;
+        min-height: 250px;
+        padding: 1.25rem 1rem;
       }
 
       .hero h1 {
@@ -509,7 +540,7 @@
 
   <!-- HERO SECTION -->
   <header class="hero">
-    <h1><i class="fas fa-map-marked-alt"></i> GeoConsultant</h1>
+    <h1><i class="fas fa-map-marked-alt"></i> NOVELTY DREAMS INVEST</h1>
     <p> Geospatial expert solutions • Based in Tamale, Ghana</p>
     <div class="badge"><i class="fas fa-location-dot"></i> Northern Regional Hub · Tamale</div>
   </header>
@@ -542,8 +573,7 @@
         <i class="fas fa-envelope"></i>
         <div>
           <div class="label">Email</div>
-          <div class="value">rayanyussif291@gmail.com</div>
-          <div class="sub">Response within 24h</div>
+          <div class="value">ndi@noveltydreamsinvest.com</div>
         </div>
       </div>
 
@@ -551,7 +581,7 @@
         <i class="fas fa-phone-alt"></i>
         <div>
           <div class="label">Phone</div>
-          <div class="value">+233 533183329</div>
+          <div class="value">+233 548302695</div>
           <div class="sub">Mon–Fri, 8am – 5pm GMT</div>
         </div>
       </div>
@@ -584,10 +614,10 @@
         <div class="service-group">
           <h4><i class="fas fa-satellite-dish"></i> Remote Sensing</h4>
           <ul>
-            <li><i class="fas fa-check"></i> NDVI</li>
-            <li><i class="fas fa-check"></i> EVI</li>
-            <li><i class="fas fa-check"></i> LULC</li>
-            <li><i class="fas fa-check"></i> NDBI</li>
+            <li><i class="fas fa-check"></i> Land Use & Land Cover (LULC) Mapping</li>
+            <li><i class="fas fa-check"></i> Change Detection Analysis</li>
+            <li><i class="fas fa-check"></i> Precision Agriculture</li>
+            <li><i class="fas fa-check"></i>Disaster Response & Risk Mapping</li>
           </ul>
         </div>
 
@@ -639,7 +669,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <p><i class="fas fa-copyright"></i> 2025 GeoConsult · Tamale, Ghana · Geospatial excellence with precision</p>
+    <p><i class="fas fa-copyright"></i> 2026 GeoConsult · Tamale, Ghana · Geospatial excellence with precision</p>
   </footer>
 
   <!-- LEAFLET MAP INITIALIZATION -->
@@ -683,7 +713,7 @@
       marker.bindPopup(`
         <div style="padding: 5px 0;">
           <i class="fas fa-building"></i> <strong>GeoConsult HQ</strong><br>
-          <span style="font-size:0.9rem; color:#1e3a5f;"> Tamale</span><br>
+          <span style="font-size:0.9rem; color:#1e3a5f;"> Tamale, Northern Region, Ghana</span><br>
           <span style="font-size:0.8rem; color:#4a5b6b;">Lat: 9.4008, Lng: -0.8393</span>
         </div>
       `).openPopup(); // open popup by default
@@ -694,14 +724,47 @@
       // Small trick: adjust attribution to include our brand (optional)
       map.attributionControl.setPrefix('GeoConsult · Tamale');
 
+      const hero = document.querySelector('.hero');
+      const heroImages = [
+        'Photos/images1.jpg',
+        'Photos/images2.jpg',
+        'Photos/images3.jpg',
+        'Photos/images4.jpg',
+        'Photos/images5.png'
+      ];
+      let heroImageIndex = 0;
+
+      heroImages.slice(1).forEach(function(imagePath) {
+        const image = new Image();
+        image.src = imagePath;
+      });
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        window.setInterval(function() {
+          heroImageIndex = (heroImageIndex + 1) % heroImages.length;
+          hero.style.setProperty('--hero-image', `url("${heroImages[heroImageIndex]}")`);
+        }, 6000);
+      }
+
       const contactForm = document.getElementById('contact-form');
       const formStatus = document.getElementById('form-status');
 
       contactForm.addEventListener('submit', function(event) {
         event.preventDefault();
+
+        const formData = new FormData(contactForm);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const service = formData.get('service');
+        const message = formData.get('message');
+        const subject = encodeURIComponent(`New enquiry from ${name}`);
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\nService needed: ${service}\n\nMessage:\n${message}`
+        );
+
         formStatus.className = 'form-status success';
-        formStatus.textContent = 'Thank you. Your enquiry has been submitted.';
-        contactForm.reset();
+        formStatus.textContent = 'Opening your email app to send the enquiry...';
+        window.location.href = `mailto:ndi@noveltydreamsinvest.com?subject=${subject}&body=${body}`;
       });
     })();
   </script>
